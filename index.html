@@ -1,0 +1,1017 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>서양음악사 ① 고대·중세 인터랙티브 퀴즈 (고난도 20문항 포함 35제)</title>
+<style>
+  :root {
+    --bg: #f6f1e7;
+    --paper: #fffdf8;
+    --ink: #231f1a;
+    --muted: #6b6257;
+    --accent: #7a2e22;
+    --accent-soft: #f5e6e3;
+    --blue-pen: #1f4e8c;
+    --red-pen: #b8292f;
+    --gold: #b0832a;
+    --border: #dfd5c5;
+    --ok: #1f6e43;
+    --ok-bg: #e6f4ec;
+    --bad: #a62626;
+    --bad-bg: #fbeaea;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: 'Pretendard', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+    background: var(--bg);
+    color: var(--ink);
+    line-height: 1.6;
+  }
+  header {
+    background: linear-gradient(135deg, #2d221b 0%, #4b3326 100%);
+    color: #fdf8ef;
+    padding: 22px 16px;
+    border-bottom: 4px solid var(--gold);
+    text-align: center;
+  }
+  header .tag {
+    display: inline-block;
+    font-size: 12px;
+    letter-spacing: 0.5px;
+    background: rgba(255,255,255,0.14);
+    padding: 3px 10px;
+    border-radius: 999px;
+    margin-bottom: 6px;
+  }
+  header h1 {
+    margin: 4px 0 6px;
+    font-size: 22px;
+  }
+  header p {
+    margin: 0;
+    font-size: 13.5px;
+    color: #e6dccb;
+  }
+  .container {
+    max-width: 820px;
+    margin: 0 auto;
+    padding: 18px 14px 60px;
+  }
+  .mode-bar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: center;
+    margin-bottom: 16px;
+  }
+  .mode-btn {
+    border: 1.5px solid var(--border);
+    background: var(--paper);
+    color: var(--ink);
+    padding: 9px 14px;
+    border-radius: 10px;
+    font-size: 13.5px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .mode-btn:hover { border-color: var(--accent); }
+  .mode-btn.active {
+    background: var(--accent);
+    color: #fff;
+    border-color: var(--accent);
+  }
+  .card {
+    background: var(--paper);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 20px;
+    box-shadow: 0 4px 16px rgba(35,31,26,0.06);
+  }
+  .progress-wrap {
+    margin-bottom: 16px;
+  }
+  .progress-meta {
+    display: flex;
+    justify-content: space-between;
+    font-size: 13px;
+    color: var(--muted);
+    margin-bottom: 6px;
+    font-weight: 600;
+  }
+  .progress-bar {
+    height: 8px;
+    background: #e8dfd0;
+    border-radius: 999px;
+    overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent), var(--gold));
+    width: 0%;
+    transition: width 0.25s ease;
+  }
+  .q-badges {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    margin-bottom: 10px;
+  }
+  .badge {
+    font-size: 12px;
+    font-weight: 700;
+    padding: 3px 9px;
+    border-radius: 6px;
+  }
+  .badge-cat { background: #efe8db; color: #4e4031; }
+  .badge-hard { background: var(--accent-soft); color: var(--red-pen); }
+  .badge-core { background: #e8eff8; color: var(--blue-pen); }
+  .q-title {
+    font-size: 17.5px;
+    font-weight: 700;
+    margin: 6px 0 16px;
+    word-break: keep-all;
+  }
+  .options {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .opt-btn {
+    text-align: left;
+    background: #fff;
+    border: 1.5px solid var(--border);
+    border-radius: 10px;
+    padding: 12px 14px;
+    font-size: 15px;
+    cursor: pointer;
+    transition: 0.15s;
+    color: var(--ink);
+  }
+  .opt-btn:hover:not(:disabled) {
+    border-color: var(--accent);
+    background: #fdf9f4;
+  }
+  .opt-btn.selected {
+    border-color: var(--blue-pen);
+    background: #eef4fc;
+    font-weight: 600;
+  }
+  .opt-btn.correct {
+    border-color: var(--ok);
+    background: var(--ok-bg);
+    color: var(--ok);
+    font-weight: 700;
+  }
+  .opt-btn.wrong {
+    border-color: var(--bad);
+    background: var(--bad-bg);
+    color: var(--bad);
+  }
+  .ox-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+  .ox-btn {
+    font-size: 26px;
+    font-weight: 800;
+    padding: 18px;
+    text-align: center;
+  }
+  .input-row {
+    display: flex;
+    gap: 8px;
+  }
+  .text-input {
+    flex: 1;
+    padding: 12px 14px;
+    font-size: 15.5px;
+    border: 1.5px solid var(--border);
+    border-radius: 10px;
+    outline: none;
+  }
+  .text-input:focus { border-color: var(--accent); }
+  .chip-sentence {
+    background: #faf6ee;
+    border: 1px dashed #cbbba0;
+    border-radius: 10px;
+    padding: 14px;
+    font-size: 15.5px;
+    line-height: 2;
+    margin-bottom: 14px;
+  }
+  .slot {
+    display: inline-block;
+    min-width: 74px;
+    padding: 0 10px;
+    margin: 0 3px;
+    border-bottom: 2px solid var(--accent);
+    background: #fff;
+    color: var(--blue-pen);
+    font-weight: 700;
+    text-align: center;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  .chip-pool {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .chip {
+    padding: 7px 13px;
+    border-radius: 999px;
+    border: 1.5px solid #cbbba0;
+    background: #fff;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+  }
+  .chip.used { opacity: 0.35; pointer-events: none; }
+  .order-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .order-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    background: #fff;
+    border: 1.5px solid var(--border);
+    border-radius: 10px;
+    padding: 10px 12px;
+    font-size: 14.5px;
+  }
+  .order-controls button {
+    border: 1px solid var(--border);
+    background: #f6f1e7;
+    border-radius: 6px;
+    padding: 4px 9px;
+    cursor: pointer;
+    font-weight: 700;
+  }
+  .action-row {
+    margin-top: 18px;
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+  }
+  .primary-btn {
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    padding: 11px 20px;
+    border-radius: 10px;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+  }
+  .primary-btn:disabled { opacity: 0.45; cursor: not-allowed; }
+  .feedback {
+    margin-top: 16px;
+    padding: 14px;
+    border-radius: 10px;
+    font-size: 14.5px;
+    display: none;
+  }
+  .feedback.ok { display: block; background: var(--ok-bg); border-left: 4px solid var(--ok); }
+  .feedback.bad { display: block; background: var(--bad-bg); border-left: 4px solid var(--bad); }
+  .feedback strong { display: block; margin-bottom: 4px; font-size: 15px; }
+  .note-section { margin-bottom: 16px; }
+  .note-section h3 {
+    margin: 0 0 8px;
+    font-size: 16px;
+    color: var(--accent);
+    border-bottom: 1.5px solid var(--border);
+    padding-bottom: 4px;
+  }
+  .note-section ul { margin: 0; padding-left: 18px; font-size: 14.5px; }
+  .note-section li { margin-bottom: 5px; }
+  .blank-key {
+    background: #fff3cd;
+    color: #7a2e22;
+    font-weight: 700;
+    padding: 1px 6px;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  .hide-blanks .blank-key {
+    background: #3a322b;
+    color: transparent;
+    user-select: none;
+  }
+  .hide-blanks .blank-key.revealed {
+    background: #e6f4ec;
+    color: #1f6e43;
+  }
+  .hidden { display: none !important; }
+  .result-box { text-align: center; padding: 10px 4px; }
+  .score-big { font-size: 38px; font-weight: 800; color: var(--accent); margin: 8px 0; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="tag">진로선택) 서양음악사 ① · 부문: 중세</div>
+  <h1>고대 · 중세 서양음악사 마스터 퀴즈</h1>
+  <p>학습지 인쇄 본문 + 파란펜·연필·빨간펜 세부 필기 완벽 반영 (총 35문항)</p>
+</header>
+
+<div class="container">
+  <div class="mode-bar">
+    <button class="mode-btn active" id="btn-mode-hard" onclick="switchMode('hard')">🔥 고난도 세부 20문항</button>
+    <button class="mode-btn" id="btn-mode-all" onclick="switchMode('all')">📚 전체 35문항 통합</button>
+    <button class="mode-btn" id="btn-mode-core" onclick="switchMode('core')">✨ 기본 핵심 15문항</button>
+    <button class="mode-btn" id="btn-mode-notes" onclick="switchMode('notes')">📖 필기 요약 노트</button>
+  </div>
+
+  <!-- 퀴즈 영역 -->
+  <div id="quiz-view" class="card">
+    <div class="progress-wrap">
+      <div class="progress-meta">
+        <span id="prog-text">문제 1 / 20</span>
+        <span id="score-text">현재 점수: 0점</span>
+      </div>
+      <div class="progress-bar"><div class="progress-fill" id="prog-fill"></div></div>
+    </div>
+
+    <div class="q-badges" id="q-badges"></div>
+    <div class="q-title" id="q-title"></div>
+    <div id="q-body"></div>
+
+    <div class="feedback" id="feedback"></div>
+
+    <div class="action-row">
+      <button class="primary-btn" id="submit-btn" onclick="checkAnswer()">정답 확인</button>
+      <button class="primary-btn hidden" id="next-btn" onclick="nextQuestion()">다음 문제 →</button>
+    </div>
+  </div>
+
+  <!-- 결과 영역 -->
+  <div id="result-view" class="card hidden">
+    <div class="result-box">
+      <div class="badge badge-hard" id="result-badge">학습 리포트</div>
+      <div class="score-big" id="final-score">0 / 20</div>
+      <p id="result-msg"></p>
+      <div style="display:flex; gap:10px; justify-content:center; flex-wrap:wrap; margin-top:16px;">
+        <button class="primary-btn" id="retry-wrong-btn" onclick="retryWrong()">❌ 틀린 문제만 다시 풀기</button>
+        <button class="primary-btn" style="background:#4b3326;" onclick="restartCurrentMode()">🔄 처음부터 다시 풀기</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 필기 요약 노트 영역 -->
+  <div id="notes-view" class="card hidden">
+    <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px; margin-bottom:14px;">
+      <strong style="font-size:16px;">📝 학습지 전체 필기 요약 (노란 키워드 클릭으로 암기 확인)</strong>
+      <button class="mode-btn" onclick="toggleBlanks(this)">🙈 빈칸 가리기 ON</button>
+    </div>
+    <div id="notes-content">
+      <div class="note-section">
+        <h3>1. 고대 음악과 사상 (기원전: 문자가 시작된 시기 ~ 5C)</h3>
+        <ul>
+          <li>악기와 신화: <span class="blank-key" onclick="revealBlank(this)">키타라</span> - 태양의 신 <span class="blank-key" onclick="revealBlank(this)">아폴론</span> (긍정) / <span class="blank-key" onclick="revealBlank(this)">아울로스</span> - 쾌락의 신 <span class="blank-key" onclick="revealBlank(this)">디오니소스</span> (부정)</li>
+          <li>플라톤 · 아리스토텔레스의 <span class="blank-key" onclick="revealBlank(this)">에토스 이론</span>: 음악의 <span class="blank-key" onclick="revealBlank(this)">음률, 리듬, 멜로디</span> 등의 변화가 사람의 감정과 영혼에 영향</li>
+          <li><span class="blank-key" onclick="revealBlank(this)">피타고라스</span> 대장간 전설: <span class="blank-key" onclick="revealBlank(this)">현악기 / 관악기 / 종</span> → <span class="blank-key" onclick="revealBlank(this)">음률, 진동수</span> 탐구 → 음을 <span class="blank-key" onclick="revealBlank(this)">의학</span>에 활용</li>
+        </ul>
+      </div>
+      <div class="note-section">
+        <h3>2. 중세 시대적 배경 & 음악적 특징 (5C ~ 14C)</h3>
+        <ul>
+          <li>연대 표기: <span class="blank-key" onclick="revealBlank(this)">BC(기원전) / AD(기원후 / 서기)</span>, 시작 사건: <span class="blank-key" onclick="revealBlank(this)">서로마 멸망</span></li>
+          <li>사회 배경: <span class="blank-key" onclick="revealBlank(this)">기독교(가톨릭)</span> 중심 사회(교회가 문화·학문·예술 주도), <span class="blank-key" onclick="revealBlank(this)">십자군 전쟁 / 대학 발달</span></li>
+          <li>교회음악 3대 원칙(빨간펜): <span class="blank-key" onclick="revealBlank(this)">무반주, 라틴어, 남성만</span></li>
+          <li>음악 발전: 초기 <span class="blank-key" onclick="revealBlank(this)">단성음악(그레고리오 성가)</span> → <span class="blank-key" onclick="revealBlank(this)">다성음악(오르가눔)</span>으로 진화</li>
+          <li>기보법 정립: <span class="blank-key" onclick="revealBlank(this)">네우마 악보, 4선보</span>의 사용 → <span class="blank-key" onclick="revealBlank(this)">성악/악보체계 정립</span></li>
+        </ul>
+      </div>
+      <div class="note-section">
+        <h3>3. 그레고리오 교황 1세 & 오르가눔</h3>
+        <ul>
+          <li><span class="blank-key" onclick="revealBlank(this)">그레고리오 성가</span>의 목적(빨간펜): <span class="blank-key" onclick="revealBlank(this)">예배 통일</span></li>
+          <li>단성음악 정의: <span class="blank-key" onclick="revealBlank(this)">화음이나 반주 없이 단일한 선율로만 이루어진 음악</span></li>
+          <li>다성음악 정의: <span class="blank-key" onclick="revealBlank(this)">두 개 이상의 선율이</span> 어우러지는 음악 (기존 선율에 다른 성부 추가 → <span class="blank-key" onclick="revealBlank(this)">초기 오르가눔</span>)</li>
+        </ul>
+      </div>
+      <div class="note-section">
+        <h3>4. 귀도 다레초 (성가 지도자)</h3>
+        <ul>
+          <li>계명창 교육 활용 곡: 그레고리안 찬트의 <span class="blank-key" onclick="revealBlank(this)">성 요한 찬가</span></li>
+          <li>6음 계명: <span class="blank-key" onclick="revealBlank(this)">Ut - Re - Mi - Fa - Sol - La</span> (<span class="blank-key" onclick="revealBlank(this)">※ Si는 없음</span>)</li>
+          <li>계명 변화: 오늘날의 '도'는 원래 <span class="blank-key" onclick="revealBlank(this)">Ut (우트)</span>에서 변화</li>
+          <li>시창 지도법: <span class="blank-key" onclick="revealBlank(this)">양피지 악보</span>를 대신해 손의 각 부분을 음과 연결하는 <span class="blank-key" onclick="revealBlank(this)">귀도의 손</span></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const ALL_QUESTIONS = [
+  // ===== 기본 핵심 15문항 (core) =====
+  {
+    id: 1, tier: 'core', cat: '고대 음악', type: 'mcq',
+    q: '고대 그리스 로마 시대에 절제와 이성을 상징하며 긍정적으로 평가받은 현악기는 무엇인가?',
+    options: ['키타라 (Kithara)', '아울로스 (Aulos)', '오르가눔 (Organum)', '네우마 (Neuma)'],
+    answer: 0,
+    exp: '태양의 신 아폴론과 연결된 현악기 키타라는 절제와 조화를 상징하여 긍정적으로 평가받았습니다.'
+  },
+  {
+    id: 2, tier: 'core', cat: '고대 음악', type: 'mcq',
+    q: '고대 피타고라스가 대장간 전설을 통해 탐구한 음악의 핵심 원리는 무엇인가?',
+    options: ['음률과 진동수', '가사와 예배 통일', '4선보와 계명창', '다성음악과 화성'],
+    answer: 0,
+    exp: '피타고라스는 대장간 쇠망치 소리의 비례를 통해 현악기·관악기·종의 음률과 진동수 원리를 발견했습니다.'
+  },
+  {
+    id: 3, tier: 'core', cat: '중세 배경', type: 'mcq',
+    q: '중세 시대의 연대 범위와 시작을 알리는 역사적 사건으로 옳은 것은?',
+    options: ['5C ~ 14C · 서로마 제국 멸망', '기원전 ~ 5C · 문자 발명', '14C ~ 16C · 동로마 제국 멸망', '17C ~ 18C · 십자군 전쟁'],
+    answer: 0,
+    exp: '중세는 5세기 서로마 제국 멸망부터 14세기까지 이어지며 기독교(가톨릭)가 문화를 주도했습니다.'
+  },
+  {
+    id: 4, tier: 'core', cat: '중세 교회음악', type: 'ox',
+    q: 'O/X 퀴즈: 중세의 대표적 교회음악인 그레고리오 성가는 파이프 오르간 반주와 함께 혼성 합창단으로 불렀다.',
+    answer: 'X',
+    exp: '빨간펜 핵심 포인트! 중세 교회음악은 [무반주 · 라틴어 · 남성만] 부르는 것이 원칙이었습니다.'
+  },
+  {
+    id: 5, tier: 'core', cat: '그레고리오 성가', type: 'input',
+    q: '그레고리오 교황 1세가 그레고리오 성가를 정리한 가장 핵심적인 종교적 목적(빨간펜 필기 4글자)은 무엇인가?',
+    accepted: ['예배통일', '예배 통일'],
+    displayAns: '예배 통일',
+    exp: '지역마다 다르던 전례 성가를 하나로 묶어 [예배 통일]을 이루기 위해 정리했습니다.'
+  },
+  {
+    id: 6, tier: 'core', cat: '그레고리오 성가', type: 'mcq',
+    q: '그레고리오 성가의 가사에 사용된 언어는 무엇인가?',
+    options: ['라틴어', '그리스어', '이탈리아어', '독일어'],
+    answer: 0,
+    exp: '서로마 가톨릭 교회의 공식 언어인 라틴어를 사용했습니다.'
+  },
+  {
+    id: 7, tier: 'core', cat: '기보법 발전', type: 'mcq',
+    q: '초기 성가의 선율 움직임을 기록하던 기호에서 4선보로 발전한 초기 기보법의 명칭은?',
+    options: ['네우마 (Neuma)', '타블라투라 (Tablature)', '솔미제이션 (Solmization)', '에토스 (Ethos)'],
+    answer: 0,
+    exp: '가사 위에 선율의 오르내림을 점과 선으로 표시하던 기호를 네우마(Neuma)라고 합니다.'
+  },
+  {
+    id: 8, tier: 'core', cat: '다성음악', type: 'input',
+    q: '그레고리오 성가의 기존 선율에 다른 성부를 추가하면서 발달한 초기 다성음악의 명칭은?',
+    accepted: ['오르가눔', '초기오르가눔', '초기 오르가눔', 'organum'],
+    displayAns: '초기 오르가눔 (Organum)',
+    exp: '단성음악인 그레고리오 성가에 다른 성부를 덧붙여 초기 오르가눔이라는 다성음악이 탄생했습니다.'
+  },
+  {
+    id: 9, tier: 'core', cat: '귀도 다레초', type: 'mcq',
+    q: '귀도 다레초가 계명창 교육에 활용한 그레고리안 찬트의 곡명은 무엇인가?',
+    options: ['성 요한 찬가', '진노의 날', '자비송', '알렐루야'],
+    answer: 0,
+    exp: '성 요한 찬가의 각 시행 첫 음절(Ut, Re, Mi, Fa, Sol, La)을 따서 계명창을 만들었습니다.'
+  },
+  {
+    id: 10, tier: 'core', cat: '귀도 다레초', type: 'ox',
+    q: 'O/X 퀴즈: 귀도 다레초가 만든 초기 계명 체계에는 오늘날의 7번째 계명인 "Si(시)"가 이미 포함되어 있었다.',
+    answer: 'X',
+    exp: '빨간펜 주의사항! 당시 계명은 Ut - Re - Mi - Fa - Sol - La의 6음 체계였으며 [※ Si는 없음]이 핵심입니다.'
+  },
+  {
+    id: 11, tier: 'core', cat: '귀도 다레초', type: 'input',
+    q: '오늘날 계명 "도(Do)"의 기원이 된 귀도 다레초 당시의 첫 번째 계명은 무엇인가?',
+    accepted: ['ut', '우트', 'ut(우트)', 'ut (우트)'],
+    displayAns: 'Ut (우트)',
+    exp: '발음이 닫혀 있어 노래하기 어려웠던 Ut(우트)가 훗날 도(Do)로 변화했습니다.'
+  },
+  {
+    id: 12, tier: 'core', cat: '귀도 다레초', type: 'input',
+    q: '값비싼 양피지 악보를 대신해 손의 각 마디와 부분을 음과 연결하여 시창을 가르친 지도법은?',
+    accepted: ['귀도의손', '귀도의 손'],
+    displayAns: '귀도의 손',
+    exp: '성가 지도자 귀도 다레초가 고안한 시각적 시창 지도법은 [귀도의 손]입니다.'
+  },
+  {
+    id: 13, tier: 'core', cat: '중세 음악 특징', type: 'chips',
+    q: '빈칸에 알맞은 단어 칩을 순서대로 채우시오.',
+    sentenceParts: ['중세 교회음악은 ', ' 반주로 ', ' 가사를 사용하며, ', ' 부르는 것이 원칙이었다.'],
+    chips: ['무반주', '라틴어', '남성만', '오르간', '그리스어', '혼성으로'],
+    answer: ['무반주', '라틴어', '남성만'],
+    exp: '빨간펜 강조 삼총사: 무반주, 라틴어, 남성만!'
+  },
+  {
+    id: 14, tier: 'core', cat: '기보와 성부', type: 'chips',
+    q: '고문서 악보 하단 빨간펜 도식의 변화 방향을 완성하시오.',
+    sentenceParts: ['기보법은 ', '에서 ', '로 발전했고, 성부 구성은 ', '에서 다성(초·오)으로 진화했다.'],
+    chips: ['네우마', '4선보', '단성', '5선보', '화성'],
+    answer: ['네우마', '4선보', '단성'],
+    exp: '악보 하단 빨간펜 요약: [네우마 → 4선보], [단성 → 다성(초·오)].'
+  },
+  {
+    id: 15, tier: 'core', cat: '음악사 흐름', type: 'order',
+    q: '중세 음악의 발전 과정을 순서대로 배열하시오. (위에서 아래로 1→4단계)',
+    items: [
+      '4선보 사용 및 귀도 다레초의 6음 계명창 정립',
+      '단성음악인 그레고리오 성가 정립 (예배 통일)',
+      '기존 선율에 다른 성부를 추가한 초기 오르가눔 발달',
+      '선율의 높낮이를 대략 표시하던 네우마 기보법 사용'
+    ],
+    answer: [1, 3, 0, 2],
+    exp: '그레고리오 성가(단성) → 네우마 → 4선보 및 귀도의 계명창 → 초기 오르가눔(다성) 순으로 발전했습니다.'
+  },
+
+  // ===== 고난도 세부 심화 20문항 (hard) =====
+  {
+    id: 16, tier: 'hard', cat: '고대 세부 필기', type: 'mcq',
+    q: '[고난도] 프린트 하단 <고대, 중세 한눈에 보기>에서 고대의 시작 시점(기원전)을 부연 설명한 연필 필기 내용은 무엇인가?',
+    options: ['문자가 시작된 시기', '서로마 제국이 멸망한 시기', '피타고라스가 태어난 시기', '그리스 도시국가가 통일된 시기'],
+    answer: 0,
+    exp: '<고대, 중세 한눈에 보기>의 고대 칸 괄호 안에 [기원전(문자가 시작된 시기 ~ 5C)]라고 적혀 있습니다.'
+  },
+  {
+    id: 17, tier: 'hard', cat: '시대적 배경 인쇄', type: 'mcq',
+    q: '[고난도] 1번 표의 "시대적 배경" 제목 바로 옆에 인쇄된 연대 표기 약어의 의미로 옳은 것은?',
+    options: ['BC는 기원전, AD는 기원후(서기)를 뜻한다.', 'BC는 중세 초기, AD는 중세 후기를 뜻한다.', 'BC는 교회음악, AD는 세속음악을 뜻한다.', 'BC는 단성성가, AD는 다성성가를 뜻한다.'],
+    answer: 0,
+    exp: '시대적 배경 제목 우측에 [BC(기원전) / AD(기원후 / 서기)]라고 인쇄되어 있습니다.'
+  },
+  {
+    id: 18, tier: 'hard', cat: '고대 악기·신화', type: 'mcq',
+    q: '[고난도] 1번 표 상단 필기에 기록된 고대 악기·수호신·당대 가치 평가의 연결로 옳은 것은?',
+    options: [
+      '키타라 - 태양의 신 아폴론(긍정) / 아울로스 - 쾌락의 신 디오니소스(부정)',
+      '키타라 - 쾌락의 신 디오니소스(긍정) / 아울로스 - 태양의 신 아폴론(부정)',
+      '키타라 - 태양의 신 아폴론(부정) / 아울로스 - 쾌락의 신 디오니소스(긍정)',
+      '키타라 - 지혜의 신 아테나(긍정) / 아울로스 - 전쟁의 신 아레스(부정)'
+    ],
+    answer: 0,
+    exp: '상단 필기에 (키타라 - 태양의 신 아폴론) - 긍정, (아울로스 - 디오니소스 - 쾌락의 신) - 부정으로 정리되어 있습니다.'
+  },
+  {
+    id: 19, tier: 'hard', cat: '에토스 이론 세부', type: 'chips',
+    q: '[고난도] 우측 상단 필기에 따른 플라톤·아리스토텔레스의 에토스 이론 핵심 3요소를 채우시오.',
+    sentenceParts: ['에토스 이론에 따르면 음악의 ', ', ', ', ', ' 등의 변화가 사람의 감정과 영혼에 영향을 준다.'],
+    chips: ['음률', '리듬', '멜로디', '진동수', '화음', '악기 편성'],
+    answer: ['음률', '리듬', '멜로디'],
+    exp: '우측 상단 필기 원문: [음악의 음률, 리듬, 멜로디 등의 변화가 사람의 감정, 영혼에 영향].'
+  },
+  {
+    id: 20, tier: 'hard', cat: '피타고라스 세부', type: 'mcq',
+    q: '[고난도] 하단 고대 칸의 필기 도식 "피타고라스 - 대장간 전설 이야기 → ( A ) → ( B )"에 들어갈 내용으로 옳은 것은?',
+    options: [
+      '(A) 현악기 / 관악기 / 종  |  (B) 음률, 진동수',
+      '(A) 키타라 / 아울로스 / 오르간  |  (B) 화음, 대위법',
+      '(A) 타악기 / 건반악기 / 성악  |  (B) 박자, 선법',
+      '(A) 현악기 / 타악기 / 피리  |  (B) 음색, 강약'
+    ],
+    answer: 0,
+    exp: '하단 연필 필기 원문: [피타고라스 - 대장간 전설 이야기 → 현악기 / 관악기 / 종 → 음률, 진동수].'
+  },
+  {
+    id: 21, tier: 'hard', cat: '피타고라스 확장', type: 'input',
+    q: '[고난도] 프린트 하단 왼쪽 맨 아래에 피타고라스의 탐구 결과인 "음"이 연결되는 응용 분야로 필기된 2글자 단어는 무엇인가?',
+    accepted: ['의학'],
+    displayAns: '의학',
+    exp: '하단 왼쪽 최하단에 [음 → 의학]이라고 필기되어 있습니다. 피타고라스는 음악의 조화를 치료에 활용했습니다.'
+  },
+  {
+    id: 22, tier: 'hard', cat: '중세 배경 세부', type: 'mcq',
+    q: '[고난도] 중세 시대적 배경 필기에서 문화·학문·예술 전반을 주도한 종교의 괄호 안 구체적 명칭은 무엇인가?',
+    options: ['가톨릭 (기독교)', '동방 정교회', '개신교 (루터교)', '로마 다신교'],
+    answer: 0,
+    exp: '시대적 배경 필기에 [기독교(가톨릭) 중심의 사회로 교회가 문화, 학문, 예술 전반을 주도했다.]라고 적혀 있습니다.'
+  },
+  {
+    id: 23, tier: 'hard', cat: '중세 역사 사건', type: 'mcq',
+    q: '[고난도] 중세 시대적 배경 칸의 맨 아랫줄에 슬래시(/)로 나란히 필기된 두 가지 역사적 사건·현상은 무엇인가?',
+    options: ['십자군 전쟁 / 대학 발달', '백년 전쟁 / 인쇄술 발달', '서로마 멸망 / 종교 개혁', '르네상스 / 시민 혁명'],
+    answer: 0,
+    exp: '시대적 배경 하단 필기에 [십자군 전쟁 / 대학 발달]이라고 기록되어 있습니다.'
+  },
+  {
+    id: 24, tier: 'hard', cat: '기보법 정립 결과', type: 'mcq',
+    q: '[고난도] 1번 표 우측 "음악적 특징"에서 "네우마 악보, 4선보의 사용"이 이끌어낸 결과로 화살표(→) 뒤에 필기된 내용은?',
+    options: ['성악/악보체계 정립', '기악/화성체계 완성', '오페라/관현악법 탄생', '평균율/조성체계 확립'],
+    answer: 0,
+    exp: '음악적 특징 세 번째 줄에 [네우마 악보, 4선보의 사용 → 성악/악보체계 정립]이라고 적혀 있습니다.'
+  },
+  {
+    id: 25, tier: 'hard', cat: '단성음악 정의', type: 'mcq',
+    q: '[고난도] 2번 ③항에 필기된 "단성음악"의 정의를 원문 그대로 가장 정확하게 옮긴 것은?',
+    options: [
+      '화음이나 반주 없이 단일한 선율로만 이루어진 음악',
+      '두 개 이상의 선율이 동시에 어우러져 화음을 이루는 음악',
+      '독창자와 합창단이 오르간 반주에 맞춰 교대로 부르는 음악',
+      '라틴어 가사에 맞춰 여러 성부가 대위법적으로 진행하는 음악'
+    ],
+    answer: 0,
+    exp: '2번 ③항 필기 원문: [단성음악 : 화음이나 반주 없이 단일한 선율로만 이루어진 음악].'
+  },
+  {
+    id: 26, tier: 'hard', cat: '다성음악 원리', type: 'mcq',
+    q: '[고난도] 2번 하단 오르가눔 설명에서 "초기 오르가눔"의 형성 방식과 "다성음악"의 필기 정의를 바르게 설명한 것은?',
+    options: [
+      '기존 선율에 다른 성부를 추가하여 발달했으며, 다성음악은 두 개 이상의 선율이 어우러지는 음악이다.',
+      '기존 선율의 반주 악기를 늘려 발달했으며, 다성음악은 여러 사람이 같은 음을 제창하는 음악이다.',
+      '기존 선율의 가사를 자국어로 바꾸어 발달했으며, 다성음악은 여성 성부를 추가한 음악이다.',
+      '기존 선율을 삭제하고 새로 작곡하여 발달했으며, 다성음악은 무반주 독창을 뜻한다.'
+    ],
+    answer: 0,
+    exp: '[기존 선율에 다른 성부를 추가하면서 초기 오르가눔이라는 초기 다성음악이 발달]했고, 다성음악은 [두 개 이상의 선율이] 어우러지는 음악입니다.'
+  },
+  {
+    id: 27, tier: 'hard', cat: '고문서 이미지 필기', type: 'mcq',
+    q: '[고난도] 2번 우측의 중세 양피지 악보 이미지 바로 아래에 빨간펜으로 적힌 약어 "단성 → 다성(초·오)"에서 (초·오)가 뜻하는 말은?',
+    options: ['초기 오르가눔', '초기 오페라', '초기 오라토리오', '초기 오스티나토'],
+    answer: 0,
+    exp: '악보 사진 하단 빨간펜 필기 [단성 → 다성(초·오)]는 단성음악에서 초기 오르가눔(다성음악)으로의 진화를 줄여 적은 것입니다.'
+  },
+  {
+    id: 28, tier: 'hard', cat: '귀도 초상화 필기', type: 'input',
+    q: '[고난도] 3번 우측 귀도 다레초 초상화 바로 아래에 연필로 적힌 그의 역할(직책 5글자)은 무엇인가?',
+    accepted: ['성가지도자', '성가 지도자'],
+    displayAns: '성가 지도자',
+    exp: '귀도 다레초의 초상화 하단에 [성가 지도자]라고 필기되어 있습니다.'
+  },
+  {
+    id: 29, tier: 'hard', cat: '귀도 원전 곡명', type: 'input',
+    q: '[고난도] 귀도 다레초가 계명창 교육에 활용한 그레고리안 찬트의 구체적인 곡명(5글자)을 쓰시오.',
+    accepted: ['성요한찬가', '성 요한 찬가'],
+    displayAns: '성 요한 찬가',
+    exp: '3번 ①항: [귀도 다레초는 그레고리안 찬트의 성 요한 찬가를 활용하여 계명창 교육에 기여하였다.]'
+  },
+  {
+    id: 30, tier: 'hard', cat: '6음 계명 순서', type: 'mcq',
+    q: '[고난도] 3번 ②항에 기록된 귀도 다레초 당시 6음 계명의 정확한 철자 순서와 빨간펜 주의사항은?',
+    options: [
+      'Ut - Re - Mi - Fa - Sol - La  (※ Si는 없음)',
+      'Do - Re - Mi - Fa - Sol - La - Si  (※ Ut는 없음)',
+      'Ut - Re - Mi - Fa - Sol - La - Si  (※ 도는 없음)',
+      'Re - Mi - Fa - Sol - La - Si  (※ Ut는 없음)'
+    ],
+    answer: 0,
+    exp: '3번 ②항: [( Ut ) - Re - Mi - Fa - Sol - La / ※ Si는 없음].'
+  },
+  {
+    id: 31, tier: 'hard', cat: '계명 한글 표기', type: 'mcq',
+    q: '[고난도] 3번 ③항에서 오늘날의 "도"로 변화하기 전 원래 계명을 영문과 한글 발음으로 함께 적은 표기는?',
+    options: ['Ut (우트)', 'Ut (유트)', 'Ut (어트)', 'Si (우트)'],
+    answer: 0,
+    exp: '3번 ③항에 [오늘날의 "도"는 원래 ( Ut (우트) )라는 계명에서 변화한 것이다.]라고 적혀 있습니다.'
+  },
+  {
+    id: 32, tier: 'hard', cat: '귀도의 손 목적', type: 'mcq',
+    q: '[고난도] 3번 ④항에 따른 "귀도의 손"의 개발 배경(무엇을 대신하기 위함인가)과 교육 방법은?',
+    options: [
+      '양피지 악보를 대신하여 손의 각 부분을 음과 연결해 노래를 가르치는 방법',
+      '4선보를 대신하여 손가락 개수로 박자의 빠르기만을 지휘하는 방법',
+      '오르가눔 성부를 대신하여 손뼉을 치며 화음을 반주하는 방법',
+      '네우마 기호를 대신하여 라틴어 가사의 억양만을 암기하는 방법'
+    ],
+    answer: 0,
+    exp: '3번 ④항: [양피지 악보를 대신하여 손의 각 부분을 음과 연결하여 노래를 가르치는 방법을 (귀도의 손)이라고 한다.]'
+  },
+  {
+    id: 33, tier: 'hard', cat: '학습지 메타 세부', type: 'mcq',
+    q: '[고난도] 학습지 최상단 표에 인쇄된 과목 선택 유형과 과목명, 그리고 "부문" 명칭을 모두 바르게 짝지은 것은?',
+    options: [
+      '진로선택) 서양음악사 ① · 부문: 중세',
+      '일반선택) 서양음악사 ① · 부문: 고대',
+      '융합선택) 세계음악사 ② · 부문: 르네상스',
+      '교양필수) 서양음악사 기초 · 부문: 바로크'
+    ],
+    answer: 0,
+    exp: '학습지 최상단 표에 [진로선택) 서양음악사 ①], [부문: 중세]라고 인쇄되어 있습니다.'
+  },
+  {
+    id: 34, tier: 'hard', cat: '종합 함정 O/X', type: 'ox',
+    q: '[고난도 함정 O/X] "그레고리오 성가는 예배 통일을 위해 남성 성가대가 라틴어로 부르는 성가로, 화음과 반주 없이 단일한 선율로 이루어진 단성음악이다."',
+    answer: 'O',
+    exp: '정답은 O! [예배 통일], [남성만], [라틴어], 그리고 단성음악의 정의인 [화음이나 반주 없이 단일한 선율로만 이루어진 음악]이 모두 완벽히 일치합니다.'
+  },
+  {
+    id: 35, tier: 'hard', cat: '고대~중세 통합 배열', type: 'order',
+    q: '[고난도 종합] 고대부터 중세 후기까지의 음악사 흐름을 시간·발전 순서대로 배열하시오. (1→5단계)',
+    items: [
+      '서로마 제국 멸망(5C) 및 기독교(가톨릭) 중심 중세 사회 형성',
+      '그레고리오 성가 기존 선율에 다른 성부를 추가한 초기 오르가눔 발달',
+      '피타고라스 대장간 전설을 통한 현악기·관악기·종의 음률·진동수 탐구',
+      '네우마 악보에서 4선보로의 발전 및 귀도 다레초의 6음 계명창 정립',
+      '그레고리오 교황 1세의 예배 통일 및 무반주·라틴어 단성 성가 정립'
+    ],
+    answer: [2, 0, 4, 3, 1],
+    exp: '고대 피타고라스(기원전~5C) → 서로마 멸망(5C) → 그레고리오 성가 → 네우마·4선보·귀도 다레초 → 초기 오르가눔(다성음악) 순서입니다.'
+  }
+];
+
+let currentMode = 'hard';
+let activeList = [];
+let idx = 0;
+let score = 0;
+let wrongIds = [];
+let answered = false;
+
+// 상태 변수 (유형별)
+let selectedOption = null;
+let slotValues = [];
+let orderState = [];
+
+function switchMode(mode) {
+  currentMode = mode;
+  document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
+  const btn = document.getElementById('btn-mode-' + mode);
+  if (btn) btn.classList.add('active');
+
+  if (mode === 'notes') {
+    document.getElementById('quiz-view').classList.add('hidden');
+    document.getElementById('result-view').classList.add('hidden');
+    document.getElementById('notes-view').classList.remove('hidden');
+    return;
+  }
+
+  document.getElementById('notes-view').classList.add('hidden');
+  document.getElementById('result-view').classList.add('hidden');
+  document.getElementById('quiz-view').classList.remove('hidden');
+
+  if (mode === 'hard') activeList = ALL_QUESTIONS.filter(q => q.tier === 'hard');
+  else if (mode === 'core') activeList = ALL_QUESTIONS.filter(q => q.tier === 'core');
+  else activeList = [...ALL_QUESTIONS];
+
+  startQuiz();
+}
+
+function startQuiz() {
+  idx = 0;
+  score = 0;
+  wrongIds = [];
+  renderQuestion();
+}
+
+function restartCurrentMode() {
+  switchMode(currentMode);
+}
+
+function retryWrong() {
+  if (wrongIds.length === 0) return;
+  activeList = ALL_QUESTIONS.filter(q => wrongIds.includes(q.id));
+  document.getElementById('result-view').classList.add('hidden');
+  document.getElementById('quiz-view').classList.remove('hidden');
+  startQuiz();
+}
+
+function renderQuestion() {
+  answered = false;
+  selectedOption = null;
+  const q = activeList[idx];
+
+  document.getElementById('prog-text').textContent = `문제 ${idx + 1} / ${activeList.length}`;
+  document.getElementById('score-text').textContent = `현재 정답: ${score}개`;
+  document.getElementById('prog-fill').style.width = `${((idx) / activeList.length) * 100}%`;
+
+  const badges = document.getElementById('q-badges');
+  badges.innerHTML = `
+    <span class="badge ${q.tier === 'hard' ? 'badge-hard' : 'badge-core'}">${q.tier === 'hard' ? '🔥 고난도 세부' : '✨ 기본 핵심'}</span>
+    <span class="badge badge-cat">${q.cat}</span>
+  `;
+
+  document.getElementById('q-title').textContent = `Q${idx + 1}. ${q.q}`;
+  const body = document.getElementById('q-body');
+  body.innerHTML = '';
+
+  const fb = document.getElementById('feedback');
+  fb.className = 'feedback';
+  fb.innerHTML = '';
+
+  document.getElementById('submit-btn').classList.remove('hidden');
+  document.getElementById('next-btn').classList.add('hidden');
+
+  if (q.type === 'mcq') {
+    const wrap = document.createElement('div');
+    wrap.className = 'options';
+    q.options.forEach((opt, i) => {
+      const btn = document.createElement('button');
+      btn.className = 'opt-btn';
+      btn.textContent = `${i + 1}. ${opt}`;
+      btn.onclick = () => {
+        if (answered) return;
+        selectedOption = i;
+        wrap.querySelectorAll('.opt-btn').forEach(b => b.classList.remove('selected'));
+        btn.classList.add('selected');
+      };
+      wrap.appendChild(btn);
+    });
+    body.appendChild(wrap);
+  } else if (q.type === 'ox') {
+    const grid = document.createElement('div');
+    grid.className = 'ox-grid';
+    ['O', 'X'].forEach(val => {
+      const btn = document.createElement('button');
+      btn.className = 'opt-btn ox-btn';
+      btn.textContent = val;
+      btn.onclick = () => {
+        if (answered) return;
+        selectedOption = val;
+        grid.querySelectorAll('.opt-btn').forEach(b => b.classList.remove('selected'));
+        btn.classList.add('selected');
+      };
+      grid.appendChild(btn);
+    });
+    body.appendChild(grid);
+  } else if (q.type === 'input') {
+    const row = document.createElement('div');
+    row.className = 'input-row';
+    const inp = document.createElement('input');
+    inp.type = 'text';
+    inp.id = 'subjective-input';
+    inp.className = 'text-input';
+    inp.placeholder = '정답을 입력하세요 (Enter로 확인)';
+    inp.onkeydown = (e) => { if (e.key === 'Enter' && !answered) checkAnswer(); };
+    row.appendChild(inp);
+    body.appendChild(row);
+    setTimeout(() => inp.focus(), 50);
+  } else if (q.type === 'chips') {
+    slotValues = new Array(q.answer.length).fill(null);
+    const sent = document.createElement('div');
+    sent.className = 'chip-sentence';
+    q.sentenceParts.forEach((part, i) => {
+      sent.appendChild(document.createTextNode(part));
+      if (i < q.answer.length) {
+        const sp = document.createElement('span');
+        sp.className = 'slot';
+        sp.id = `slot-${i}`;
+        sp.textContent = `(${i + 1})`;
+        sp.onclick = () => {
+          if (answered || !slotValues[i]) return;
+          const removed = slotValues[i];
+          slotValues[i] = null;
+          sp.textContent = `(${i + 1})`;
+          document.querySelectorAll('.chip').forEach(c => {
+            if (c.dataset.val === removed) c.classList.remove('used');
+          });
+        };
+        sent.appendChild(sp);
+      }
+    });
+    body.appendChild(sent);
+
+    const pool = document.createElement('div');
+    pool.className = 'chip-pool';
+    q.chips.forEach(ch => {
+      const b = document.createElement('button');
+      b.className = 'chip';
+      b.textContent = ch;
+      b.dataset.val = ch;
+      b.onclick = () => {
+        if (answered) return;
+        const emptyIdx = slotValues.indexOf(null);
+        if (emptyIdx === -1) return;
+        slotValues[emptyIdx] = ch;
+        document.getElementById(`slot-${emptyIdx}`).textContent = ch;
+        b.classList.add('used');
+      };
+      pool.appendChild(b);
+    });
+    body.appendChild(pool);
+  } else if (q.type === 'order') {
+    orderState = q.items.map((_, i) => i);
+    renderOrderList(body, q);
+  }
+}
+
+function renderOrderList(container, q) {
+  container.innerHTML = '';
+  const list = document.createElement('div');
+  list.className = 'order-list';
+  orderState.forEach((origIdx, pos) => {
+    const row = document.createElement('div');
+    row.className = 'order-item';
+    row.innerHTML = `<span><strong>${pos + 1}단계.</strong> ${q.items[origIdx]}</span>`;
+    const ctrl = document.createElement('div');
+    ctrl.className = 'order-controls';
+    const up = document.createElement('button');
+    up.textContent = '▲';
+    up.disabled = pos === 0 || answered;
+    up.onclick = () => {
+      [orderState[pos - 1], orderState[pos]] = [orderState[pos], orderState[pos - 1]];
+      renderOrderList(container, q);
+    };
+    const dn = document.createElement('button');
+    dn.textContent = '▼';
+    dn.disabled = pos === orderState.length - 1 || answered;
+    dn.onclick = () => {
+      [orderState[pos + 1], orderState[pos]] = [orderState[pos], orderState[pos + 1]];
+      renderOrderList(container, q);
+    };
+    ctrl.appendChild(up);
+    ctrl.appendChild(dn);
+    row.appendChild(ctrl);
+    list.appendChild(row);
+  });
+  container.appendChild(list);
+}
+
+function normalize(str) {
+  return str.toLowerCase().replace(/[\s\(\)·,\-]/g, '');
+}
+
+function checkAnswer() {
+  if (answered) return;
+  const q = activeList[idx];
+  let isCorrect = false;
+
+  if (q.type === 'mcq') {
+    if (selectedOption === null) return alert('보기를 선택해 주세요!');
+    isCorrect = selectedOption === q.answer;
+    const btns = document.querySelectorAll('.opt-btn');
+    btns.forEach((b, i) => {
+      b.disabled = true;
+      if (i === q.answer) b.classList.add('correct');
+      else if (i === selectedOption) b.classList.add('wrong');
+    });
+  } else if (q.type === 'ox') {
+    if (selectedOption === null) return alert('O 또는 X를 선택해 주세요!');
+    isCorrect = selectedOption === q.answer;
+    document.querySelectorAll('.ox-btn').forEach(b => {
+      b.disabled = true;
+      if (b.textContent === q.answer) b.classList.add('correct');
+      else if (b.textContent === selectedOption) b.classList.add('wrong');
+    });
+  } else if (q.type === 'input') {
+    const val = document.getElementById('subjective-input').value.trim();
+    if (!val) return alert('정답을 입력해 주세요!');
+    const norm = normalize(val);
+    isCorrect = q.accepted.some(a => normalize(a) === norm);
+    document.getElementById('subjective-input').disabled = true;
+  } else if (q.type === 'chips') {
+    if (slotValues.includes(null)) return alert('모든 빈칸을 채워 주세요!');
+    isCorrect = slotValues.every((v, i) => v === q.answer[i]);
+  } else if (q.type === 'order') {
+    isCorrect = orderState.every((v, i) => v === q.answer[i]);
+  }
+
+  answered = true;
+  if (isCorrect) score++;
+  else wrongIds.push(q.id);
+
+  document.getElementById('score-text').textContent = `현재 정답: ${score}개`;
+
+  const fb = document.getElementById('feedback');
+  fb.className = `feedback ${isCorrect ? 'ok' : 'bad'}`;
+  let ansText = '';
+  if (q.type === 'input') ansText = ` (정답: ${q.displayAns})`;
+  else if (q.type === 'chips') ansText = ` (정답: ${q.answer.join(' → ')})`;
+  else if (q.type === 'order') ansText = ` (정답 순서: ${q.answer.map(i => q.items[i]).join(' → ')})`;
+
+  fb.innerHTML = `<strong>${isCorrect ? '⭕ 정답입니다!' : '❌ 아쉽습니다!'}${ansText}</strong>${q.exp}`;
+
+  document.getElementById('submit-btn').classList.add('hidden');
+  const nextBtn = document.getElementById('next-btn');
+  nextBtn.textContent = idx === activeList.length - 1 ? '최종 결과 보기 🎉' : '다음 문제 →';
+  nextBtn.classList.remove('hidden');
+}
+
+function nextQuestion() {
+  idx++;
+  if (idx >= activeList.length) showResult();
+  else renderQuestion();
+}
+
+function showResult() {
+  document.getElementById('quiz-view').classList.add('hidden');
+  document.getElementById('result-view').classList.remove('hidden');
+  document.getElementById('prog-fill').style.width = '100%';
+
+  const total = activeList.length;
+  const pct = Math.round((score / total) * 100);
+  document.getElementById('final-score').textContent = `${score} / ${total} (${pct}%)`;
+
+  let msg = '';
+  if (pct === 100) msg = '완벽합니다! 학습지 구석구석의 빨간펜·연필 필기까지 100% 정복한 서양음악사 마스터입니다.';
+  else if (pct >= 80) msg = '훌륭합니다! 세부 함정 문제까지 대부분 정확히 꿰뚫고 있습니다. 틀린 문제만 한 번 더 점검해 보세요.';
+  else msg = '좋은 시작입니다! 아래 [틀린 문제만 다시 풀기]나 [필기 요약 노트]의 빈칸 테스트로 세부 필기를 복습해 보세요.';
+
+  document.getElementById('result-msg').textContent = msg;
+  document.getElementById('retry-wrong-btn').style.display = wrongIds.length > 0 ? 'inline-block' : 'none';
+}
+
+function toggleBlanks(btn) {
+  const box = document.getElementById('notes-content');
+  box.classList.toggle('hide-blanks');
+  box.querySelectorAll('.blank-key').forEach(k => k.classList.remove('revealed'));
+  btn.textContent = box.classList.contains('hide-blanks') ? '👀 빈칸 모두 보기' : '🙈 빈칸 가리기 ON';
+}
+
+function revealBlank(el) {
+  el.classList.toggle('revealed');
+}
+
+// 초기 실행: 고난도 세부 20문항 모드
+switchMode('hard');
+</script>
+</body>
+</html>
